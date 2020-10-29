@@ -1,0 +1,75 @@
+name: platforms
+on:
+  push:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  linux-macos:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          repository: 'pyfony/console-bundle'
+          path: 'console-bundle'
+          ref: 'v0.2.6'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: 'py38_4.8.3'
+      - name: Init
+        run: |
+          export SHELL=$SHELL # for python to be able to access the bash version
+          source ./.github/workflows/platforms.sh
+          run_tests "bash" ".bashrc"
+
+  linux-zsh:
+    name: 'linux-zsh'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          repository: 'pyfony/console-bundle'
+          path: 'console-bundle'
+          ref: 'v0.2.6'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: 'py38_4.8.3'
+      - name: Install zsh
+        run: |
+          sudo apt-get install zsh -y
+          zsh --version
+      - name: Init
+        run: |
+          export SHELL=bin/zsh # for python to be able to access the bash version
+          source ./.github/workflows/platforms.sh
+          run_tests "zsh" ".zshrc"
+        shell: zsh {0}
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          repository: 'pyfony/console-bundle'
+          path: 'console-bundle'
+          ref: 'v0.2.6'
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: 'py38_4.8.3'
+      - name: Update PATH
+        shell: bash -l {0}
+        run: echo "/c/Miniconda3/Scripts" >> $GITHUB_PATH
+      - name: Init
+        run: |
+          export SHELL=$SHELL # for python to be able to access the bash version
+          source ./.github/workflows/platforms.sh
+          run_tests "bash" ".bashrc"
+        shell: sh {0}

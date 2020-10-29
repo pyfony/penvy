@@ -1,0 +1,21 @@
+name: main
+on: [push]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: 'py38_4.8.3'
+      - name: setup
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py --silent -o get-poetry.py
+          python get-poetry.py -y --version 1.0.0
+          rm get-poetry.py
+          ~/.poetry/bin/poetry install --no-root
+      - name: black
+        run: source ~/.poetry/env && poetry run poe black-check
+      - name: flake8
+        run: source ~/.poetry/env && poetry run poe flake8
