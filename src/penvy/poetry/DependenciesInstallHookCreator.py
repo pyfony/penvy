@@ -25,6 +25,7 @@ class DependenciesInstallHookCreator(SetupStepInterface):
             f.write(f"{self._poetry_executable_path} install --no-root\n")
 
     def should_be_run(self) -> bool:
-        return not os.path.isfile(self._post_merge_hook_path) or not file_contains_string(
-            "poetry install --no-root", self._post_merge_hook_path
+        return os.path.isdir(os.path.dirname(self._post_merge_hook_path)) and (
+            not os.path.isfile(self._post_merge_hook_path)
+            or not file_contains_string("poetry install --no-root", self._post_merge_hook_path)
         )

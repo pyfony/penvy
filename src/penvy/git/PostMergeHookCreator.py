@@ -27,4 +27,4 @@ class PostMergeHookCreator(SetupStepInterface):
             subprocess.check_call(["chmod", "+x", self._post_merge_hook_path])
 
     def should_be_run(self) -> bool:
-        return not os.path.isfile(self._post_merge_hook_path)
+        return os.path.isdir(os.path.dirname(self._post_merge_hook_path)) and not os.path.isfile(self._post_merge_hook_path)
