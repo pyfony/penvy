@@ -20,6 +20,6 @@ class GitVersionCheck(CheckInterface):
         git_version = re.sub(r"^git version ([0-9.]+)[.].+$", "\\1", first_line)
 
         if StrictVersion(git_version) < StrictVersion(self._minimal_version):
-            return f"Conda version {git_version} is too old, please update to {self._minimal_version} or higher"
+            return f"Git version {git_version} is too old, please update to {self._minimal_version} or higher"
 
         self._logger.debug(f"Git version {git_version} ok")
