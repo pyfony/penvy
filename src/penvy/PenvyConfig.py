@@ -16,7 +16,7 @@ class PenvyConfig(EnvConfig):
             "logger": {"name": "env-init"},
             "conda": {"minimal_version": "4.7.12"},
             "git": {"minimal_version": "2.24.0"},
-            "poetry": {"install_version": "1.0.0"},
+            "poetry": {"install_version": "1.1.4"},
         }
 
     def get_parameters_resolvers(self, default_config: dict) -> List[ParametersResolverInterface]:
