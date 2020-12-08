@@ -22,4 +22,4 @@ def run_shell_command(command: str, cwd: str = os.getcwd(), shell=False):
 
 def _log_subprocess_output(pipe):
     for line in iter(pipe.readline, b""):  # b'\n'-separated lines
-        print(line.decode("utf-8").rstrip())
+        print(line.decode("utf-8", errors="ignore").rstrip())
