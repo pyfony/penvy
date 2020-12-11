@@ -126,7 +126,9 @@ class Container:
     def get_dependencies_installer(self):
         from penvy.poetry.DependenciesInstaller import DependenciesInstaller
 
-        return DependenciesInstaller(self._parameters["poetry"]["executable_path"], self.get_logger())
+        return DependenciesInstaller(
+            self._parameters["poetry"]["executable_path"], self._parameters["shell"]["verbose_output_enabled"], self.get_logger()
+        )
 
     @diservice
     def get_activate_conda_env_call(self):

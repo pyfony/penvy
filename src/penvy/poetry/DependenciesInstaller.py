@@ -7,9 +7,11 @@ class DependenciesInstaller(SetupStepInterface):
     def __init__(
         self,
         poetry_executable_path: str,
+        verbose_output_enabled: bool,
         logger: Logger,
     ):
         self._poetry_executable_path = poetry_executable_path
+        self._verbose_output_enabled = verbose_output_enabled
         self._logger = logger
 
     def get_description(self):
@@ -18,7 +20,16 @@ class DependenciesInstaller(SetupStepInterface):
     def run(self):
         self._logger.info("Installing dependencies from poetry.lock")
 
-        run_shell_command(f"{self._poetry_executable_path} install --no-root", shell=True)
+        cmd_parts = [
+            self._poetry_executable_path,
+            "install",
+            "--no-root",
+        ]
+
+        if self._verbose_output_enabled:
+            cmd_parts.append("-vvv")
+
+        run_shell_command(" ".join(cmd_parts), shell=True)
 
     def should_be_run(self) -> bool:
         return True

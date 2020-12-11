@@ -8,6 +8,7 @@ from penvy.container.dicontainer import Container
 from penvy.poetry.PoetryPathResolver import PoetryPathResolver
 from penvy.python.PythonExecutablePathResolver import PythonExecutablePathResolver
 from penvy.shell.ShellResolver import ShellResolver
+from penvy.shell.VerbosityResolver import VerbosityResolver
 
 
 class PenvyConfig(EnvConfig):
@@ -21,6 +22,7 @@ class PenvyConfig(EnvConfig):
 
     def get_parameters_resolvers(self, default_config: dict) -> List[ParametersResolverInterface]:
         return [
+            VerbosityResolver(),
             ShellResolver(),
             LoggerLevelResolver(),
             CondaPathsResolver(CondaExecutablePathFinder()),
