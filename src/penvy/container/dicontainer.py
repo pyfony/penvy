@@ -27,7 +27,7 @@ class Container:
         from penvy.poetry.PoetryInstaller import PoetryInstaller
 
         return PoetryInstaller(
-            self._parameters["python"]["executable_path"],
+            self._parameters["conda"]["executable_path"],
             self._parameters["poetry"]["executable_path"],
             self._parameters["poetry"]["install_version"],
             self.get_logger(),
@@ -123,11 +123,22 @@ class Container:
         return DotEnvCreator(self._parameters["project"]["dir"], self.get_logger())
 
     @diservice
+    def get_conda_version_getter(self):
+        from penvy.conda.CondaVersionGetter import CondaVersionGetter
+
+        return CondaVersionGetter(self._parameters["conda"]["executable_path"])
+
+    @diservice
     def get_dependencies_installer(self):
         from penvy.poetry.DependenciesInstaller import DependenciesInstaller
 
         return DependenciesInstaller(
-            self._parameters["poetry"]["executable_path"], self._parameters["shell"]["verbose_output_enabled"], self.get_logger()
+            self._parameters["conda"]["executable_path"],
+            self._parameters["project"]["venv_dir"],
+            self._parameters["poetry"]["executable_path"],
+            self._parameters["shell"]["verbose_output_enabled"],
+            self.get_conda_version_getter(),
+            self.get_logger(),
         )
 
     @diservice
@@ -153,8 +164,9 @@ class Container:
         from penvy.conda.CondaVersionCheck import CondaVersionCheck
 
         return CondaVersionCheck(
-            self._parameters["conda"]["minimal_version"],
             self._parameters["conda"]["executable_path"],
+            self._parameters["conda"]["minimal_version"],
+            self.get_conda_version_getter(),
             self.get_logger(),
         )
 

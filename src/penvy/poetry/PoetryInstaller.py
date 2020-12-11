@@ -11,12 +11,12 @@ from penvy.string.random_string_generator import generate_random_string
 class PoetryInstaller(SetupStepInterface):
     def __init__(
         self,
-        python_executable_path: str,
+        conda_executable_path: str,
         poetry_executable_path: str,
         install_version: str,
         logger: Logger,
     ):
-        self._python_executable_path = python_executable_path
+        self._conda_executable_path = conda_executable_path
         self._poetry_executable_path = poetry_executable_path
         self._install_version = install_version
         self._logger = logger
@@ -33,7 +33,9 @@ class PoetryInstaller(SetupStepInterface):
         url = "https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py"
         urllib.request.urlretrieve(url, target_file_name)
 
-        run_shell_command(f"{self._python_executable_path} {target_file_name} -y --version {self._install_version}", shell=True)
+        cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", target_file_name, "-y", "--version", self._install_version]
+
+        run_shell_command(" ".join(cmd_parts), shell=True)
 
     def should_be_run(self) -> bool:
         return not self._poetry_on_path() and not os.path.isfile(self._poetry_executable_path)
