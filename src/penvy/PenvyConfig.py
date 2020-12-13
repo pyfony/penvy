@@ -9,6 +9,7 @@ from penvy.poetry.PoetryPathResolver import PoetryPathResolver
 from penvy.python.PythonExecutablePathResolver import PythonExecutablePathResolver
 from penvy.shell.ShellResolver import ShellResolver
 from penvy.shell.VerbosityResolver import VerbosityResolver
+from penvy.conda.possible_executable_paths import load_possible_executable_paths
 
 
 class PenvyConfig(EnvConfig):
@@ -25,7 +26,7 @@ class PenvyConfig(EnvConfig):
             VerbosityResolver(),
             ShellResolver(),
             LoggerLevelResolver(),
-            CondaPathsResolver(CondaExecutablePathFinder()),
+            CondaPathsResolver(CondaExecutablePathFinder(load_possible_executable_paths())),
             PythonExecutablePathResolver(),
             PoetryPathResolver(),
         ]
