@@ -1,10 +1,11 @@
 import os
-import shutil
+import re
 import urllib.request
 import tempfile
+from distutils.version import StrictVersion
 from logging import Logger
 from penvy.setup.SetupStepInterface import SetupStepInterface
-from penvy.shell.runner import run_shell_command
+from penvy.shell.runner import run_shell_command, run_and_read_line
 from penvy.string.random_string_generator import generate_random_string
 
 
@@ -38,12 +39,24 @@ class PoetryInstaller(SetupStepInterface):
         run_shell_command(" ".join(cmd_parts), shell=True)
 
     def should_be_run(self) -> bool:
-        return not self._poetry_on_path() and not os.path.isfile(self._poetry_executable_path)
+        return not self._poetry_installed() or not self._poetry_up_to_date()
 
-    def _poetry_on_path(self):
-        poetry_executable_path = shutil.which("poetry")
+    def _poetry_installed(self):
+        return os.path.isfile(self._poetry_executable_path)
 
-        return (
-            poetry_executable_path is not None
-            and poetry_executable_path[0:5] != "/mnt/"  # WSL2: poetry executable being reused from Windows
-        )
+    def _poetry_up_to_date(self):
+        current_version = self._get_poetry_version()
+
+        return StrictVersion(current_version) >= StrictVersion(self._install_version)
+
+    def _get_poetry_version(self):
+        cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", self._poetry_executable_path, "-V"]
+
+        first_line = run_and_read_line(" ".join(cmd_parts), shell=True)
+
+        match = re.match(r"^Poetry version ([\d.]+)$", first_line)
+
+        if not match:
+            raise Exception(f"Unable to resolve current poetry version. Try updating poetry manually to {self._install_version}")
+
+        return match.group(1)
