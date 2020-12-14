@@ -191,6 +191,8 @@ class Container:
 
         return DependenciesInstallHookCreator(
             self._parameters["project"]["dir"] + "/.git/hooks/post-merge",
+            self._parameters["conda"]["executable_path"],
+            self._parameters["project"]["venv_dir"],
             self._parameters["poetry"]["executable_path"],
             self.get_logger(),
         )
