@@ -43,6 +43,7 @@ class DependenciesInstaller(SetupStepInterface):
             self._logger.warning("Upgrade to Miniconda 4.9.0+ to see live output")
 
         poetry_install_parts = [
+            "python",
             self._poetry_executable_path,
             "install",
             "--no-root",
