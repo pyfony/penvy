@@ -3,9 +3,10 @@ import re
 import urllib.request
 import tempfile
 from distutils.version import StrictVersion
+from pathlib import Path
 from logging import Logger
 from penvy.setup.SetupStepInterface import SetupStepInterface
-from penvy.shell.runner import run_shell_command, run_and_read_line
+from penvy.shell.runner import run_shell_command
 from penvy.string.random_string_generator import generate_random_string
 
 
@@ -50,11 +51,15 @@ class PoetryInstaller(SetupStepInterface):
         return StrictVersion(current_version) >= StrictVersion(self._install_version)
 
     def _get_poetry_version(self):
-        cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", self._poetry_executable_path, "-V"]
+        poetry_version_file_path = Path(self._poetry_executable_path).parent.parent.joinpath("lib/poetry/__version__.py")
 
-        first_line = run_and_read_line(" ".join(cmd_parts), shell=True)
+        if not os.path.isfile(poetry_version_file_path):
+            raise Exception(f"Cannot find poetry version file at {poetry_version_file_path}")
 
-        match = re.match(r"^Poetry version ([\d.]+)$", first_line)
+        with open(poetry_version_file_path, encoding="utf-8") as f:
+            content = f.read()
+
+        match = re.match(r"^__version__ = \"([^\"]+)\"$", content)
 
         if not match:
             raise Exception(f"Unable to resolve current poetry version. Try updating poetry manually to {self._install_version}")
