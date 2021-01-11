@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "penvy"
-version = "1.0.4"
+version = "1.0.5"
 description = "Pyfony framework development environment initializer"
 readme = "README.md"
 repository = "https://github.com/pyfony/penvy"
