@@ -12,7 +12,7 @@ jobs:
       - name: setup
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py --silent -o get-poetry.py
-          python get-poetry.py -y --version 1.0.0
+          python get-poetry.py -y --version 1.1.8
           rm get-poetry.py
           ~/.poetry/bin/poetry install --no-root
       - name: black
