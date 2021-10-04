@@ -21,6 +21,8 @@ class CondaEnvironmentCreator(SetupStepInterface):
     def run(self):
         self._logger.info(f"Creating Conda environment in {self._venv_dir}")
 
+        run_shell_command(f"{self._conda_executable_path} config --remove channels defaults", shell=True)
+        run_shell_command(f"{self._conda_executable_path} config --append channels conda-forge", shell=True)
         run_shell_command(f"{self._conda_executable_path} env create -f environment.yml -p {self._venv_dir}", shell=True)
 
     def should_be_run(self) -> bool:
