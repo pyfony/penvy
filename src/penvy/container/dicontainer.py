@@ -196,3 +196,19 @@ class Container:
             self._parameters["poetry"]["executable_path"],
             self.get_logger(),
         )
+
+    @diservice
+    def get_pyproject_loader(self):
+        from penvy.poetry.PyprojectLoader import PyprojectLoader
+
+        return PyprojectLoader(
+            self._parameters["project"]["dir"] + "/pyproject.toml",
+        )
+
+    @diservice
+    def get_dependencies_loader(self):
+        from penvy.poetry.DependenciesLoader import DependenciesLoader
+
+        return DependenciesLoader(
+            self._parameters["project"]["dir"] + "/poetry.lock",
+        )
