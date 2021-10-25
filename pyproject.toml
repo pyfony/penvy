@@ -42,7 +42,7 @@ requires = ["poetry>=1.0.0"]
 build-backend = "poetry.masonry.api"
 
 [tool.poe.tasks]
-black = "black --line-length=140 src"
-black-check = "black --line-length=140 --check src"
-flake8 = "flake8 --ignore=E501,W503 src"
+black = "black --line-length=140 --exclude src/penvy/toml src"
+black-check = "black --line-length=140 --exclude src/penvy/toml --check src"
+flake8 = "flake8 --ignore=E501,W503 --exclude src/penvy/toml src"
 precommit = ["black", "flake8"]
