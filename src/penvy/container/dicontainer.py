@@ -38,7 +38,10 @@ class Container:
         from penvy.conda.CondaEnvironmentCreator import CondaEnvironmentCreator
 
         return CondaEnvironmentCreator(
-            self._parameters["conda"]["executable_path"], self._parameters["project"]["venv_dir"], self.get_logger()
+            self._parameters["conda"]["executable_path"],
+            self._parameters["project"]["venv_dir"],
+            self.get_pyfony_environment_loader(),
+            self.get_logger(),
         )
 
     @diservice
@@ -195,4 +198,28 @@ class Container:
             self._parameters["project"]["venv_dir"],
             self._parameters["poetry"]["executable_path"],
             self.get_logger(),
+        )
+
+    @diservice
+    def get_dependencies_loader(self):
+        from penvy.poetry.DependenciesLoader import DependenciesLoader
+
+        return DependenciesLoader(
+            self._parameters["project"]["dir"] + "/poetry.lock",
+        )
+
+    @diservice
+    def get_pyproject_loader(self):
+        from penvy.poetry.PyprojectLoader import PyprojectLoader
+
+        return PyprojectLoader(
+            self._parameters["project"]["dir"] + "/pyproject.toml",
+        )
+
+    @diservice
+    def get_pyfony_environment_loader(self):
+        from penvy.pyfony.PyfonyEnvironmentLoader import PyfonyEnvironmentLoader
+
+        return PyfonyEnvironmentLoader(
+            self.get_pyproject_loader(),
         )
