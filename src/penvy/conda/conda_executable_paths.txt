@@ -1,3 +1,4 @@
+/databricks/conda/bin/conda
 ~/Miniconda3/Library/bin/conda.bat
 ~/Anaconda3/Library/bin/conda.bat
 ~/AppData/Local/Continuum/miniconda3/condabin/conda.bat
