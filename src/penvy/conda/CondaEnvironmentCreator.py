@@ -24,4 +24,7 @@ class CondaEnvironmentCreator(SetupStepInterface):
         run_shell_command(f"{self._conda_executable_path} env create -f environment.yml -p {self._venv_dir}", shell=True)
 
     def should_be_run(self) -> bool:
-        return not os.path.isdir(self._venv_dir)
+        if not os.path.isdir(self._venv_dir):
+            return True
+
+        return len(os.listdir(self._venv_dir)) == 0
