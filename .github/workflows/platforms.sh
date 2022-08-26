@@ -1,3 +1,5 @@
+set -euo pipefail
+
 run_tests() {
   local SHELLNAME="$1"
   local RC_FILE_NAME="$2"

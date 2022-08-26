@@ -53,6 +53,6 @@ def resolve_parameters(env_configs: List[EnvConfig], cli_args: Namespace):
         config_resolvers = config_resolvers + env_config.get_parameters_resolvers(parameters)
 
     resolved_parameters_builder = ResolvedParametersBuilder(config_resolvers)
-    resolved_parameters = resolved_parameters_builder.build(cli_args)
+    resolved_parameters = resolved_parameters_builder.build(parameters, cli_args)
 
     return parameters_merger.merge(parameters, resolved_parameters)
