@@ -13,15 +13,21 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'macos-latest']
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout bundle code
+        uses: actions/checkout@v2
         with:
           repository: 'pyfony/console-bundle'
           path: 'console-bundle'
           ref: 'v0.2.6'
-      - uses: conda-incubator/setup-miniconda@v2.0.0
+
+      - name: Install Miniforge
+        uses: conda-incubator/setup-miniconda@v2.1.1
         with:
-          miniconda-version: 'py38_4.8.3'
+          miniforge-version: 4.10.3-6
+
       - name: Init
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version
@@ -32,19 +38,26 @@ jobs:
     name: 'linux-zsh'
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout bundle code
+        uses: actions/checkout@v2
         with:
           repository: 'pyfony/console-bundle'
           path: 'console-bundle'
           ref: 'v0.2.6'
-      - uses: conda-incubator/setup-miniconda@v2.0.0
+
+      - name: Install Miniforge
+        uses: conda-incubator/setup-miniconda@v2.1.1
         with:
-          miniconda-version: 'py38_4.8.3'
+          miniforge-version: 4.10.3-6
+
       - name: Install zsh
         run: |
           sudo apt-get install zsh -y
           zsh --version
+
       - name: Init
         run: |
           export SHELL=bin/zsh # for python to be able to access the bash version
@@ -55,18 +68,25 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout bundle code
+        uses: actions/checkout@v2
         with:
           repository: 'pyfony/console-bundle'
           path: 'console-bundle'
           ref: 'v0.2.6'
-      - uses: conda-incubator/setup-miniconda@v2.0.0
+
+      - name: Install Miniforge
+        uses: conda-incubator/setup-miniconda@v2.1.1
         with:
-          miniconda-version: 'py38_4.8.3'
+          miniforge-version: 4.10.3-6
+
       - name: Update PATH
         shell: bash -l {0}
         run: echo "/c/Miniconda3/Scripts" >> $GITHUB_PATH
+
       - name: Init
         run: |
           export SHELL=$SHELL # for python to be able to access the bash version

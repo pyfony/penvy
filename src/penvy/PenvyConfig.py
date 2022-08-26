@@ -5,6 +5,7 @@ from penvy.conda.CondaPathsResolver import CondaPathsResolver
 from penvy.logger.LoggerLevelResolver import LoggerLevelResolver
 from penvy.parameters.ParametersResolverInterface import ParametersResolverInterface
 from penvy.container.dicontainer import Container
+from penvy.poetry.PoetryHomeResolver import PoetryHomeResolver
 from penvy.poetry.PoetryPathResolver import PoetryPathResolver
 from penvy.python.PythonExecutablePathResolver import PythonExecutablePathResolver
 from penvy.shell.ShellResolver import ShellResolver
@@ -18,7 +19,7 @@ class PenvyConfig(EnvConfig):
             "logger": {"name": "env-init"},
             "conda": {"minimal_version": "4.7.12"},
             "git": {"minimal_version": "2.24.0"},
-            "poetry": {"install_version": "1.1.8"},
+            "poetry": {"install_version": "1.2.0", "home": "~/.poetry"},
         }
 
     def get_parameters_resolvers(self, default_config: dict) -> List[ParametersResolverInterface]:
@@ -28,6 +29,7 @@ class PenvyConfig(EnvConfig):
             LoggerLevelResolver(),
             CondaPathsResolver(CondaExecutablePathFinder(load_possible_executable_paths())),
             PythonExecutablePathResolver(),
+            PoetryHomeResolver(),
             PoetryPathResolver(),
         ]
 
@@ -46,12 +48,16 @@ class PenvyConfig(EnvConfig):
             container.get_bash_profile_creator(),
             container.get_pyfony_env_creator(),
             container.get_file_creator_bashrc(),
+            container.get_file_creator_zshrc(),
+            container.get_file_creator_zprofile(),
             container.get_source_conda_appender_bashrc(),
             container.get_source_pyfony_env_appender_bashrc(),
-            container.get_file_creator_zshrc(),
             container.get_source_conda_appender_zshrc(),
             container.get_source_pyfony_env_appender_zshrc(),
             container.get_poetry_installer(),
+            container.get_poetry_bin_windows_path_appender(),
+            container.get_poetry_bin_unix_path_appender_bash(),
+            container.get_poetry_bin_unix_path_appender_zsh(),
             container.get_dot_env_creator(),
             container.get_dependencies_installer(),
             container.get_post_merge_hook_creator(),

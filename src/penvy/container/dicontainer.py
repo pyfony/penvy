@@ -30,6 +30,40 @@ class Container:
             self._parameters["conda"]["executable_path"],
             self._parameters["poetry"]["executable_path"],
             self._parameters["poetry"]["install_version"],
+            self._parameters["poetry"]["home"],
+            self.get_logger(),
+        )
+
+    @diservice
+    def get_poetry_bin_windows_path_appender(self):
+        from penvy.poetry.PoetryBinWindowsPathAppender import PoetryBinWindowsPathAppender
+
+        return PoetryBinWindowsPathAppender(
+            self._parameters["poetry"]["home"],
+            self.get_logger(),
+        )
+
+    @diservice
+    def get_poetry_bin_unix_path_appender_bash(self):
+        import os
+        from penvy.poetry.PoetryBinUnixPathAppender import PoetryBinUnixPathAppender
+
+        return PoetryBinUnixPathAppender(
+            self._parameters["poetry"]["home"],
+            os.path.expanduser("~") + os.sep + ".bash_profile",
+            self._parameters["shell"]["is_bash"],
+            self.get_logger(),
+        )
+
+    @diservice
+    def get_poetry_bin_unix_path_appender_zsh(self):
+        import os
+        from penvy.poetry.PoetryBinUnixPathAppender import PoetryBinUnixPathAppender
+
+        return PoetryBinUnixPathAppender(
+            self._parameters["poetry"]["home"],
+            os.path.expanduser("~") + os.sep + ".zprofile",
+            self._parameters["shell"]["is_zsh"],
             self.get_logger(),
         )
 
@@ -59,16 +93,23 @@ class Container:
     @diservice
     def get_file_creator_bashrc(self):
         import os
-        from penvy.shell.RcFileCreator import RcFileCreator
+        from penvy.shell.ShellFileCreator import ShellFileCreator
 
-        return RcFileCreator(os.path.expanduser("~") + os.sep + ".bashrc", self._parameters["shell"]["is_bash"], self.get_logger())
+        return ShellFileCreator(os.path.expanduser("~") + os.sep + ".bashrc", self._parameters["shell"]["is_bash"], self.get_logger())
 
     @diservice
     def get_file_creator_zshrc(self):
         import os
-        from penvy.shell.RcFileCreator import RcFileCreator
+        from penvy.shell.ShellFileCreator import ShellFileCreator
 
-        return RcFileCreator(os.path.expanduser("~") + os.sep + ".zshrc", self._parameters["shell"]["is_zsh"], self.get_logger())
+        return ShellFileCreator(os.path.expanduser("~") + os.sep + ".zshrc", self._parameters["shell"]["is_zsh"], self.get_logger())
+
+    @diservice
+    def get_file_creator_zprofile(self):
+        import os
+        from penvy.shell.ShellFileCreator import ShellFileCreator
+
+        return ShellFileCreator(os.path.expanduser("~") + os.sep + ".zprofile", self._parameters["shell"]["is_zsh"], self.get_logger())
 
     @diservice
     def get_source_conda_appender_bashrc(self):
@@ -133,11 +174,8 @@ class Container:
         from penvy.poetry.DependenciesInstaller import DependenciesInstaller
 
         return DependenciesInstaller(
-            self._parameters["conda"]["executable_path"],
-            self._parameters["project"]["venv_dir"],
             self._parameters["poetry"]["executable_path"],
             self._parameters["shell"]["verbose_output_enabled"],
-            self.get_conda_version_getter(),
             self.get_logger(),
         )
 

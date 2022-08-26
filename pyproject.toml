@@ -27,9 +27,9 @@ packages = [
 "penvy-init" = "penvy.init:main"
 
 [tool.poetry.dependencies]
-python = ">=3.6,<4.0"
+python = "^3.6"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pylint = "2.4.*"
 pytest = "5.2.*"
 flake8 = "^3.8.4"
@@ -38,8 +38,8 @@ pep8-naming = "^0.11.1"
 poethepoet = "^0.9.0"
 
 [build-system]
-requires = ["poetry>=1.0.0"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 black = "black --line-length=140 --exclude src/penvy/toml src"
