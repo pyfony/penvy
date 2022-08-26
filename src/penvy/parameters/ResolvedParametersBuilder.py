@@ -9,9 +9,7 @@ class ResolvedParametersBuilder:
         self._resolvers = resolvers
         self._config_merger = ParametersMerger()
 
-    def build(self, cli_args: Namespace):
-        config = dict()
-
+    def build(self, config: dict, cli_args: Namespace):
         for resolver in self._resolvers:
             new_config = resolver.resolve(config, cli_args)
 

@@ -3,10 +3,9 @@ import re
 import urllib.request
 import tempfile
 from distutils.version import StrictVersion
-from pathlib import Path
 from logging import Logger
 from penvy.setup.SetupStepInterface import SetupStepInterface
-from penvy.shell.runner import run_shell_command
+from penvy.shell.runner import run_with_live_output, run_and_read_line
 from penvy.string.random_string_generator import generate_random_string
 
 
@@ -16,11 +15,13 @@ class PoetryInstaller(SetupStepInterface):
         conda_executable_path: str,
         poetry_executable_path: str,
         install_version: str,
+        poetry_home: str,
         logger: Logger,
     ):
         self._conda_executable_path = conda_executable_path
         self._poetry_executable_path = poetry_executable_path
         self._install_version = install_version
+        self._poetry_home = poetry_home
         self._logger = logger
 
     def get_description(self):
@@ -30,14 +31,19 @@ class PoetryInstaller(SetupStepInterface):
         self._logger.info("Installing Poetry globally")
 
         tmp_dir = tempfile.gettempdir()
-        target_file_name = tmp_dir + f"/get-poetry_{generate_random_string(5)}.py"
+        target_file_name = tmp_dir + f"/install-poetry_{generate_random_string(5)}.py"
 
-        url = f"https://raw.githubusercontent.com/python-poetry/poetry/{self._install_version}/get-poetry.py"
+        url = "https://install.python-poetry.org"
         urllib.request.urlretrieve(url, target_file_name)
 
-        cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", target_file_name, "-y", "--version", self._install_version]
+        cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", target_file_name, "-y"]
 
-        run_shell_command(" ".join(cmd_parts), shell=True)
+        install_poetry_env_vars = {
+            "POETRY_HOME": self._poetry_home,
+            "POETRY_VERSION": self._install_version,
+        }
+
+        run_with_live_output(" ".join(cmd_parts), env={**os.environ, **install_poetry_env_vars}, shell=True)
 
     def should_be_run(self) -> bool:
         return not self._poetry_installed() or not self._poetry_up_to_date()
@@ -51,15 +57,9 @@ class PoetryInstaller(SetupStepInterface):
         return StrictVersion(current_version) >= StrictVersion(self._install_version)
 
     def _get_poetry_version(self):
-        poetry_version_file_path = Path(self._poetry_executable_path).parent.parent.joinpath("lib/poetry/__version__.py")
+        version_cmd_output = run_and_read_line(f"{self._poetry_executable_path} --version", shell=True)
 
-        if not os.path.isfile(poetry_version_file_path):
-            raise Exception(f"Cannot find poetry version file at {poetry_version_file_path}")
-
-        with open(poetry_version_file_path, encoding="utf-8") as f:
-            content = f.read()
-
-        match = re.match(r"^__version__ = \"([^\"]+)\"$", content)
+        match = re.match(r"^Poetry \(?version (\w+\.\w+\.\w+)\)?$", version_cmd_output)
 
         if not match:
             raise Exception(f"Unable to resolve current poetry version. Try updating poetry manually to {self._install_version}")
