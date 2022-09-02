@@ -1,3 +1,4 @@
+from typing import Dict
 from penvy.poetry import config_reader
 
 
@@ -8,7 +9,7 @@ class DependenciesLoader:
     ):
         self._poetry_lock_path = poetry_lock_path
 
-    def load(self) -> dict:
+    def load(self) -> Dict[str, Dict[str, str]]:
         poetry_lock = config_reader.read(self._poetry_lock_path)
         dependencies = {}
 
@@ -20,7 +21,7 @@ class DependenciesLoader:
 
         return dependencies
 
-    def load_main(self) -> dict:
+    def load_main(self) -> Dict[str, Dict[str, str]]:
         dependencies = self.load()
 
         return {
@@ -32,7 +33,7 @@ class DependenciesLoader:
             if val["category"] == "main"
         }
 
-    def load_dev(self) -> dict:
+    def load_dev(self) -> Dict[str, Dict[str, str]]:
         dependencies = self.load()
 
         return {

@@ -1,3 +1,4 @@
+from typing import Dict
 from penvy.poetry import config_reader
 
 
@@ -8,5 +9,5 @@ class PyprojectLoader:
     ):
         self._pyproject_path = pyproject_path
 
-    def load(self) -> dict:
+    def load(self) -> Dict:
         return config_reader.read(self._pyproject_path)

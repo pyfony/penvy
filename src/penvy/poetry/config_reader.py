@@ -1,8 +1,9 @@
+from typing import Dict
 from pathlib import Path
 from penvy import toml
 
 
-def read(path: str) -> dict:
+def read(path: str) -> Dict:
     allowed_files = ["pyproject.toml", "poetry.lock"]
 
     if Path(path).name not in allowed_files:
