@@ -32,7 +32,7 @@ class PoetryInstaller(SetupStepInterface):
         tmp_dir = tempfile.gettempdir()
         target_file_name = tmp_dir + f"/get-poetry_{generate_random_string(5)}.py"
 
-        url = "https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py"
+        url = f"https://raw.githubusercontent.com/python-poetry/poetry/{self._install_version}/get-poetry.py"
         urllib.request.urlretrieve(url, target_file_name)
 
         cmd_parts = [self._conda_executable_path, "run", "-n", "base", "python", target_file_name, "-y", "--version", self._install_version]
