@@ -29,6 +29,8 @@ class PoetryBinWindowsPathAppender(SetupStepInterface):
         self._set_windows_path(updated_path)
 
     def _get_windows_path(self) -> str:
+        # Can't be imported on unix platforms
+        # pylint: disable=import-error,import-outside-toplevel
         import winreg
 
         with winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER) as root:
@@ -38,6 +40,8 @@ class PoetryBinWindowsPathAppender(SetupStepInterface):
                 return path
 
     def _set_windows_path(self, path: str):
+        # Can't be imported on unix platforms
+        # pylint: disable=import-error,import-outside-toplevel
         import winreg
 
         with winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER) as root:

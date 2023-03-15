@@ -17,6 +17,7 @@ class CondaVersionCheck(CheckInterface):
         self._conda_version_getter = conda_version_getter
         self._logger = logger
 
+    # pylint: disable=inconsistent-return-statements
     def run(self):
         self._logger.debug(f"Using conda executable: {self._conda_executable_path}")
 

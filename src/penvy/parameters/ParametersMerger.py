@@ -1,6 +1,6 @@
 class ParametersMerger:
     def merge(self, a, b, overwrite=True, path=None):
-        "merges b into a"
+        """merges b into a"""
         if path is None:
             path = []
 
@@ -13,7 +13,7 @@ class ParametersMerger:
                 elif overwrite is True:
                     a[key] = b[key]
                 else:
-                    raise Exception("Conflict at %s" % ".".join(path + [str(key)]))
+                    raise Exception(f"Conflict at {'.'.join(path + [str(key)])}")
             else:
                 a[key] = b[key]
         return a

@@ -11,6 +11,7 @@ class ShellCheck(CheckInterface):
     ):
         self._logger = logger
 
+    # pylint: disable=inconsistent-return-statements
     def run(self):
         try:
             shell_name = detect_shell()

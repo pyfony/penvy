@@ -30,19 +30,37 @@ packages = [
 python = "^3.7"
 
 [tool.poetry.dev-dependencies]
-pylint = "2.4.*"
-pytest = "5.2.*"
-flake8 = "^3.8.4"
+pylint = "^2.12.2"
 black = "^22.0.0"
-pep8-naming = "^0.11.1"
 poethepoet = "^0.9.0"
+
+[tool.black]
+line-length = 140
+exclude="src/penvy/toml|src/penvy/logger/colorlog"
+
+[tool.pylint.basic]
+module-rgx = "(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$"
+ignore-paths="src/penvy/toml|src/penvy/logger/colorlog"
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-docstring",
+    "wrong-import-order",
+    "duplicate-code",
+    "line-too-long",
+    "bad-continuation",
+    "too-many-arguments",
+    "too-few-public-methods",
+    "ungrouped-imports",
+    "no-self-use",
+]
+good-names = ["a", "b", "e", "i", "k", "n", "f", "v", "df", "sc"]
+
+[tool.poe.tasks]
+pylint = "pylint src"
+black = "black src"
+black-check = "black --check src"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poe.tasks]
-black = "black --line-length=140 --exclude src/penvy/toml src"
-black-check = "black --line-length=140 --exclude src/penvy/toml --check src"
-flake8 = "flake8 --ignore=E501,W503 --exclude src/penvy/toml src"
-precommit = ["black", "flake8"]

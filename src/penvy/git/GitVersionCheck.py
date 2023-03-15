@@ -14,6 +14,7 @@ class GitVersionCheck(CheckInterface):
         self._minimal_version = minimal_version
         self._logger = logger
 
+    # pylint: disable=inconsistent-return-statements
     def run(self):
         first_line = run_and_read_line("git --version", shell=True)
 

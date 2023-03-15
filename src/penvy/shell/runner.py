@@ -1,3 +1,4 @@
+# pylint: disable=dangerous-default-value,consider-using-with
 import io
 import os
 import sys
