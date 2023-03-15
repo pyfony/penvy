@@ -1,3 +1,4 @@
+# pylint: disable=unused-argument
 from abc import ABC
 from typing import List
 from penvy.parameters.ParametersResolverInterface import ParametersResolverInterface

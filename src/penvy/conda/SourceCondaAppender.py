@@ -28,7 +28,7 @@ class SourceCondaAppender(SetupStepInterface):
 
         self._logger.info(f"Adding {conda_sh_path_foward_slashes} to {self._rc_file_path_shorten}")
 
-        with open(self._rc_file_path, "a") as f:
+        with open(self._rc_file_path, mode="a", encoding="utf-8") as f:
             f.write(f"source {conda_sh_path_foward_slashes}\n")
 
     def should_be_run(self) -> bool:

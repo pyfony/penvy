@@ -1,3 +1,4 @@
+# pylint: disable=import-outside-toplevel,too-many-public-methods
 from penvy.container.diservice import diservice
 
 

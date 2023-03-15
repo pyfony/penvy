@@ -4,7 +4,7 @@ import stat
 
 
 def rmdir(dir_to_delete: str):
-    def on_rm_error(func, path, exc_info):
+    def on_rm_error(func, path, exc_info):  # noqa # pylint: disable=unused-argument
         # path contains the path of the file that couldn't be removed
         # let's just assume that it's read-only and unlink it.
         os.chmod(path, stat.S_IWRITE)

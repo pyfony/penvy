@@ -25,7 +25,7 @@ class SourcePyfonyEnvAppender(SetupStepInterface):
     def run(self):
         self._logger.info(f'Adding "source {self._pyfony_env_script_path_shoten}" to {self._rc_file_path_shorten}')
 
-        with open(self._rc_file_path, "a") as f:
+        with open(self._rc_file_path, mode="a", encoding="utf-8") as f:
             f.write(f"source {self._pyfony_env_script_path_shoten}\n")
 
     def should_be_run(self) -> bool:

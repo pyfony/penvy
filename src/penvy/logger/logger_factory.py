@@ -1,4 +1,4 @@
-import penvy.logger.colorlog as colorlog
+from penvy.logger import colorlog
 
 
 def get_logger(name: str, level: int):
@@ -8,10 +8,10 @@ def get_logger(name: str, level: int):
     cformat = "%(log_color)s" + "%(asctime)s - %(message)s"
     formatter = colorlog.ColoredFormatter(cformat, "%H:%M:%S")
 
-    ch = colorlog.StreamHandler()
-    ch.setFormatter(formatter)
-    ch.setLevel(level)
+    chandler = colorlog.StreamHandler()
+    chandler.setFormatter(formatter)
+    chandler.setLevel(level)
 
-    logger.handlers = [ch]
+    logger.handlers = [chandler]
 
     return logger

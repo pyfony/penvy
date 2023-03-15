@@ -1,5 +1,6 @@
 import os
 from logging import Logger
+from pathlib import Path
 from penvy.setup.SetupStepInterface import SetupStepInterface
 from penvy.shell.home_path_shortener import shorten_home_path
 
@@ -22,7 +23,7 @@ class ShellFileCreator(SetupStepInterface):
     def run(self):
         self._logger.info(f"Creating {self._file_path_shorten}")
 
-        open(self._file_path, "a").close()
+        Path(self._file_path).touch()
 
     def should_be_run(self) -> bool:
         return self._expected_shell_is_running and not os.path.isfile(self._file_path)
