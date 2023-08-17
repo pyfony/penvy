@@ -4,6 +4,7 @@ import urllib.request
 import tempfile
 from distutils.version import StrictVersion
 from logging import Logger
+from shutil import which
 from penvy.setup.SetupStepInterface import SetupStepInterface
 from penvy.shell.runner import run_with_live_output, run_and_read_line
 from penvy.string.random_string_generator import generate_random_string
@@ -46,7 +47,7 @@ class PoetryInstaller(SetupStepInterface):
         run_with_live_output(" ".join(cmd_parts), env={**os.environ, **install_poetry_env_vars}, shell=True)
 
     def should_be_run(self) -> bool:
-        return not self._poetry_installed() or not self._poetry_up_to_date()
+        return which("poetry") is not None
 
     def _poetry_installed(self):
         return os.path.isfile(self._poetry_executable_path)
