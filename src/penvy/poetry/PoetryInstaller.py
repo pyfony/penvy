@@ -47,7 +47,7 @@ class PoetryInstaller(SetupStepInterface):
         run_with_live_output(" ".join(cmd_parts), env={**os.environ, **install_poetry_env_vars}, shell=True)
 
     def should_be_run(self) -> bool:
-        return which("poetry") is not None
+        return which("poetry") is None
 
     def _poetry_installed(self):
         return os.path.isfile(self._poetry_executable_path)
