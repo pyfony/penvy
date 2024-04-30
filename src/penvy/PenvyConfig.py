@@ -1,3 +1,4 @@
+import os
 from typing import List
 from penvy.env.EnvConfig import EnvConfig
 from penvy.conda.CondaExecutablePathFinder import CondaExecutablePathFinder
@@ -15,11 +16,14 @@ from penvy.conda.possible_executable_paths import load_possible_executable_paths
 
 class PenvyConfig(EnvConfig):
     def get_parameters(self) -> dict:
+        poetry_home = os.getenv("POETRY_HOME") or "~/.poetry"
+        poetry_version = os.getenv("POETRY_VERSION") or "1.5.1"
+
         return {
             "logger": {"name": "env-init"},
             "conda": {"minimal_version": "4.7.12"},
             "git": {"minimal_version": "2.24.0"},
-            "poetry": {"install_version": "1.5.1", "home": "~/.poetry"},
+            "poetry": {"install_version": poetry_version, "home": poetry_home},
         }
 
     def get_parameters_resolvers(self, default_config: dict) -> List[ParametersResolverInterface]:
