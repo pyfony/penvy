@@ -19,10 +19,10 @@ def run_and_read_line(command: str, cwd: str = os.getcwd(), env: dict = os.envir
 
 def run_shell_command(command: str, cwd: str = os.getcwd(), env: dict = os.environ, shell=False):
     proc = subprocess.Popen(command, cwd=cwd, env=env, shell=shell)
-    proc.communicate()
+    stdout, stderr = proc.communicate()
 
     if proc.returncode != 0:
-        raise Exception(f"Shell command failed with code: {proc.returncode}")
+        raise Exception(f"Shell command failed with code: {proc.returncode}\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}")
 
 
 def run_with_live_output(command: str, cwd: str = os.getcwd(), env: dict = os.environ, shell=False):
